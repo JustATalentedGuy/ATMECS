@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ isSideMenuOpen: false }">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Business Prediction Tool</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #2d3748;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .card {
+            background-color: #2d3748;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        canvas {
+            background-color: #000; /* Chart background */
+        }
+
+        .full-width-card {
+            grid-column: span 2; /* Span two columns for full width */
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2d3748;
+            padding: 15px;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            color: green;
+        }
+
+        #news-articles div {
+            margin-bottom: 10px; /* Space between news articles */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li><a href="#">Forecasting</a></li>
+                <li><a href="#">History</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-grow p-6">
+            <header>
+                <h1 class="text-xl font-semibold">Business Prediction Tool</h1>
+                <!-- Navigation Bar -->
+                <nav style="margin-top: 10px;">
+                    <button class="bg-purple-500 text-white px-4 py-2 rounded">Synthetic Creation Bot</button>
+                </nav>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content" id="dashboard-content">
+                <!-- Prediction Forecasting (Full Width) -->
+                <div class="card full-width-card">
+                    <h3>Prediction Forecasting (Next 10 Years)</h3>
+                    <canvas id="forecastChart"></canvas>
+                </div>
+
+                <!-- Sales Forecast Chart -->
+                <div class="card">
+                    <h3>Sales Forecast</h3>
+                    <canvas id="salesChart"></canvas>
+                </div>
+
+                <!-- Revenue/Profit/Loss Comparison -->
+                <div class="card">
+                    <h3>Revenue/Profit/Loss</h3>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+
+                <!-- Customer Review Distribution -->
+                <div class="card">
+                    <h3>Customer Review Distribution</h3>
+                    <canvas id="reviewChart"></canvas>
+                </div>
+
+                <!-- KPI Metrics -->
+                <div class="card">
+                    <h3>KPI Metrics</h3>
+                    <canvas id="kpiChart"></canvas>
+                </div>
+
+                <!-- Company Growth Chart -->
+                <div class="card">
+                    <h3>Company Growth Over Time</h3>
+                    <canvas id="growthChart"></canvas>
+                </div>
+
+                <!-- Profit Margin Chart -->
+                <div class="card">
+                    <h3>Profit Margin Analysis</h3>
+                    <canvas id="marginChart"></canvas>
+                </div>
+
+                <!-- Loss Analysis Chart -->
+                <div class="card">
+                    <h3>Loss Analysis Over Time</h3>
+                    <canvas id="lossChart"></canvas>
+                </div>
+
+               <!-- Microsoft Products List -->
+               <!-- List of Microsoft Products with Growth Percentage -->
+               <div class="card full-width-card">
+                   <h3>Microsoft Products Overview</h3>
+                   <!-- List of Microsoft Products with Growth Percentage --> 
+                   <div id="microsoft-products"></div>
+               </div>
+
+               <!-- Real-time News Section -->
+               <!-- Real-time News Section --> 
+               <div class="card full-width-card" id="news-section">
+                   <h3>Real-Time Microsoft News</h3>
+                   <!-- News articles will be injected here --> 
+                   <div id="news-articles"></div>
+               </div>
+
+           </div>
+
+       </div>
+
+   </div>
+
+   <!-- Chart.js for dynamic forecasting -->
+   <!-- Chart.js for dynamic forecasting --> 
+   <script >
+       // Prediction Forecasting Chart
+       const ctxForecast = document.getElementById('forecastChart').getContext('2d');
+       const forecastChart = new Chart(ctxForecast, {
+           type: 'line',
+           data: {
+               labels: Array.from({length: 11}, (_, i) => `Year ${i}`), // Next 10 years
+               datasets: [{
+                   label: 'Forecasted Sales',
+                   data: [120000, 150000, 170000, 200000, 220000, 250000, 280000, 310000, 350000, 400000, 450000],
+                   borderColor: 'rgba(255, 0, 0, 1)',
+                   backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                   borderWidth: 2,
+                   pointBackgroundColor: '#ffffff',
+                   pointBorderWidth: 3
+               }]
+           },
+           options: {
+               scales: { y: { beginAtZero: true } },
+               responsive: true
+           }
+       });
+
+       // Sales Forecast Chart
+       const ctxSales = document.getElementById('salesChart').getContext('2d');
+       const salesChart = new Chart(ctxSales, {
+           type:'bar',
+           data:{
+               labels:['January', 'February', 'March', 'April', 'May', 'June'],
+               datasets:[{
+                       label:'Sales',
+                       data:[12000,15000,13000,18000,17000,20000],
+                       backgroundColor:'rgba(0 ,255 ,0 ,.5)',
+                       borderColor:'#fff',
+                       borderWidth :1,
+                   }]
+           },
+           options:{
+               scales:{y:{beginAtZero:true}},
+               responsive:true
+           }
+       });
+
+       // Revenue/Profit/Loss Chart
+       const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+       const revenueChart = new Chart(ctxRevenue,{
+           type:'bar',
+           data:{
+               labels:['January', 'February', 'March', 'April', 'May', 'June'],
+               datasets:[{
+                       label:'Revenue',
+                       data:[30000 ,35000 ,32000 ,40000 ,38000 ,45000],
+                       backgroundColor:'rgba(0 ,255 ,0 ,.5)',
+                       borderColor:'#fff',
+                       borderWidth :1,
+                   },
+                   {
+                       label:'Profit',
+                       data:[15000 ,18000 ,16000 ,20000 ,19000 ,22000],
+                       backgroundColor:'rgba(0 ,0 ,255 ,.5)',
+                       borderColor:'#fff',
+                       borderWidth :1,
+                   },
+                   {
+                       label:'Loss',
+                       data:[5000 ,3000 ,2000 ,1000 ,4000 ,3000],
+                       backgroundColor:'rgba(255 ,0 ,0 ,.5)',
+                       borderColor:'#fff',
+                       borderWidth :1,
+                   }]
+           },
+           options:{
+               scales:{y:{beginAtZero:true}},
+               responsive:true
+           }
+       });
+
+       // Customer Review Distribution Chart
+       const ctxReview = document.getElementById('reviewChart').getContext('2d');
+       const reviewChart = new Chart(ctxReview,{
+           type:'pie',
+           data:{
+               labels:['Positive','Neutral','Negative'],
+               datasets:[{
+                   label:'Customer Reviews',
+                   data:[60 ,30 ,10],
+                   backgroundColor:['rgba(0 ,255 ,0 ,.7)','rgba(255 ,255 ,0 ,.7)','rgba(255 ,0 ,0 ,.7)'],
+                   borderColor:'#fff',
+                   borderWidth :1
+               }]
+           },
+           options:{responsive:true}
+       });
+
+       // KPI Metrics Chart
+       const ctxKPI = document.getElementById('kpiChart').getContext('2d');
+       const kpiChart = new Chart(ctxKPI,{
+           type:'radar',
+           data:{
+               labels:['Sales Growth','Customer Retention','Churn Rate'],
+               datasets:[{
+                   label:'KPI Comparison',
+                   data:[65 ,59 ,90],
+                   backgroundColor:'rgba(255 ,0 ,0 ,.5)',
+                   borderColor:'#ff0000',
+                   pointBackgroundColor:'#fff'
+               }]
+           },
+           options:{
+               scale:{
+                   ticks:{beginAtZero:true}
+               },
+               responsive:true,
+           }
+       });
+
+       // Company Growth Over Time Chart
+       const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+       const growthChart = new Chart(ctxGrowth,{
+           type:'line',
+           data:{
+               labels:['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023'],
+               datasets:[{
+                   label:'Company Growth (%)',
+                   data:[5.5 ,6.7 ,7.8 ,9.1 ,10.4 ,12.5 ,14.7 ,16.8 ,18.9 ,21.1],
+                   borderColor:'#ffcc00',
+                   backgroundColor:'rgba(255 ,204 ,0 ,.5)',
+                   fill:true,
+               }]
+           },
+           options:{
+               scales:{y:{beginAtZero:true}},
+               responsive:true,
+           }
+       });
+
+       // Profit Margin Analysis Chart
+       const ctxMargin = document.getElementById('marginChart').getContext('2d');
+       const marginChart = new Chart(ctxMargin,{
+           type:'bar',
+           data:{
+               labels:['Q1','Q2','Q3','Q4'],
+               datasets:[{
+                   label:'Profit Margin (%)',
+                   data:[20 ,25 ,30 ,35],
+                   backgroundColor:'rgba(100 ,149 ,237 ,.7)',
+                   borderColor:'#fff',
+                   borderWidth :1,
+               }]
+           },
+           options:{
+               scales:{y:{beginAtZero:true}},
+               responsive:true,
+           }
+       });
+
+       // Loss Analysis Over Time Chart
+       const ctxLoss = document.getElementById('lossChart').getContext('2d');
+       const lossChart = new Chart(ctxLoss,{
+           type:'line',
+           data:{
+               labels:['January','February','March','April','May','June'],
+               datasets:[{
+                   label:'Loss ($)',
+                   data:[500 ,300 ,200 ,100 ,400 ,300],
+                   borderColor:'#ff4500',
+                   backgroundColor:'rgba(255 ,69 ,0 ,.5)',
+                   fill:true,
+               }]
+           },
+           options:{
+               scales:{y:{beginAtZero:true}},
+               responsive:true,
+           }
+       });
+
+       // Fetch Real-Time Microsoft News
+       async function fetchMicrosoftNews() {
+           const apiKey = '3c9170c9fa0548cbafb4001d0afe172a'; // Your API key
+           const url = `https://newsapi.org/v2/everything?q=Microsoft&language=en&apiKey=${apiKey}`;
+           try {
+               const response = await fetch(url);
+               const data = await response.json();
+               if (data.status === "ok") {
+                   displayNews(data.articles);
+               } else {
+                   console.error("Failed to fetch news articles.", data.status);
+               }
+           } catch (error) {
+               console.error("Error fetching news:", error);
+           }
+       }
+
+       function displayNews(articles) {
+           const newsSection = document.getElementById('news-articles');
+           newsSection.innerHTML = ''; // Clear existing news
+           articles.forEach((article) => {
+              if (article.description && article.url) { // Check for valid entries
+                  const articleDiv = document.createElement('div');
+                  articleDiv.innerHTML = `
+                      <h4>${article.title}</h4>
+                      ${article.description ? `<p>${article.description}</p>` : ''}
+                      ${article.url ? `<a href="${article.url}" target="_blank">Read more</a>` : ''}`;
+                  newsSection.appendChild(articleDiv);
+              }
+          });
+      }
+
+      fetchMicrosoftNews();
+
+      // Display Microsoft Products Overview
+      function displayMicrosoftProducts() {
+          const productsSection = document.getElementById("microsoft-products");
+          const products = [
+              { name: "Microsoft Word", growthRate: "15%" },
+              { name: "Microsoft Excel", growthRate: "20%" },
+              { name: "Microsoft PowerPoint", growthRate: "10%" },
+              { name: "Microsoft Outlook", growthRate: "12%" },
+              { name: "Microsoft Teams", growthRate: "25%" },
+              { name: "OneDrive", growthRate: "18%" },
+              { name: "SharePoint", growthRate: "14%" },
+              { name: "Azure", growthRate: "30%" },
+              { name: "Dynamics", growthRate:"22%" },
+              { name:"Visual Studio",growthRate:"17%"}
+          ];
+
+          products.forEach(product => {
+              const productCard = document.createElement("div");
+              productCard.className = "card";
+              productCard.innerHTML = `
+                  <h4>${product.name}</h4>
+                  <p>Growth Rate: ${product.growthRate}</p>`;
+              productsSection.appendChild(productCard);
+          });
+      }
+
+      displayMicrosoftProducts();
+
+   </script>
+
+</body>
+
+</html>

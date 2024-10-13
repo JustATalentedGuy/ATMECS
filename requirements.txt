@@ -1,0 +1,8 @@
+Flask==2.2.5
+pandas
+pinecone
+sentence_transformers
+matplotlib
+re
+torch
+transformers
